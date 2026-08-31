@@ -1,3 +1,4 @@
+using DG.Tweening;
 using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,6 +19,11 @@ public class EnemyScript : MonoBehaviour
     [SerializeField]
     private List<Transform> PatrolPoint = new List<Transform>();
 
+    [SerializeField]
+    private AudioSource ZombieAudio;
+
+    int currentPoint = 0;
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -35,11 +41,26 @@ public class EnemyScript : MonoBehaviour
     {
         if(Vector3.Distance(transform.position, player.position) <= 10)
         {
+            ZombieAudio.Play();
             agent.destination = player.position;
         }
         else
         {
-            agent.destination = PatrolPoint[0].position;
+            if (Vector3.Distance(transform.position, PatrolPoint[currentPoint].position) >= 3)
+            {
+                agent.destination = PatrolPoint[currentPoint].position;
+            }
+            else
+            {
+                if (currentPoint < PatrolPoint.Count-1)
+                {
+                    currentPoint++;
+                }
+                else
+                {
+                    currentPoint = 0;
+                }
+            }
         }
 
         if(Vector2.Distance(transform.position,player.position) <= agent.stoppingDistance)
@@ -55,6 +76,8 @@ public class EnemyScript : MonoBehaviour
     public void TakeDamage(float value)
     {
         health -= value;
+        GetComponent<MeshRenderer>().material.DOColor(Color.red, 1).From();
+        GetComponent<MeshRenderer>().material.DOColor(Color.gray, 1);
         if(health <= 0)
         {
             Destroy(this.gameObject);

@@ -4,12 +4,38 @@ public class Ammo : MonoBehaviour
 {
     [SerializeField]
     private int amountAmmo = 5;
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField]
+    private int amountLife = 3;
+    [SerializeField]
+    private int amountTime = 10;
+    public enum pickupSelection
+    {
+        Life,
+        ammo,
+        time
+    }
+
     void Start()
     {
-        
+        int value = UnityEngine.Random.Range(0, 10);
+        if(value > 7.5)
+        {
+            currentSelection = pickupSelection.time;
+            GetComponent<MeshRenderer>().material.color = Color.yellow;
+        }
+        else if(value > 5)
+        {
+            currentSelection = pickupSelection.Life;
+            GetComponent<MeshRenderer>().material.color = Color.green;
+        }
+        else
+        {
+            currentSelection = pickupSelection.ammo;
+            GetComponent<MeshRenderer>().material.color = Color.aquamarine;
+        }
     }
+
+    public pickupSelection currentSelection;
 
     // Update is called once per frame
     void Update()
@@ -21,7 +47,18 @@ public class Ammo : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            other.transform.GetChild(0).GetComponent<PlayerShoot>().AddBullets(amountAmmo);
+            switch(currentSelection)
+            {
+                case pickupSelection.Life:
+                    other.GetComponent<PlayerHealth>().TakeDamage(-amountLife);
+                    break;
+                case pickupSelection.ammo:
+                    other.transform.GetChild(0).GetComponent<PlayerShoot>().AddBullets(amountAmmo);
+                    break;
+                case pickupSelection.time:
+                    GameManager.instance.AddTime(amountTime);
+                    break;
+            }
             Destroy(this.gameObject);
         }
     }

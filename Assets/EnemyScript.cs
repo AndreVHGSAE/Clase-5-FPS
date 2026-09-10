@@ -22,6 +22,9 @@ public class EnemyScript : MonoBehaviour
     [SerializeField]
     private AudioSource ZombieAudio;
 
+    [SerializeField]
+    private GameObject RDrop;
+
     int currentPoint = 0;
 
     private void Awake()
@@ -80,6 +83,11 @@ public class EnemyScript : MonoBehaviour
         GetComponent<MeshRenderer>().material.DOColor(Color.gray, 1);
         if(health <= 0)
         {
+            int RandomDrop = Random.Range(1, 101);
+            if (RandomDrop>50)
+            {
+                Instantiate(RDrop, this.transform.position, Quaternion.identity);
+            }
             Destroy(this.gameObject);
         }
     }

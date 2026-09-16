@@ -23,7 +23,7 @@ public class CameraRotation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Mouse.current == null) return;
+        if (Mouse.current == null || Time.timeScale!=1) return;
         Vector2 mouseInput = Mouse.current.delta.ReadValue();
         xRotation -= mouseInput.y * ySensitivity;
         xRotation = Mathf.Clamp(xRotation, -90, 90);

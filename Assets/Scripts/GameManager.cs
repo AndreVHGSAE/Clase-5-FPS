@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using static UnityEngine.Rendering.DebugUI;
 
@@ -13,6 +14,19 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private TMP_Text GameTimeText;
+    [SerializeField]
+    private GameObject pausePanel;
+
+    public InputAction PauseInput;
+
+    private void OnEnable()
+    {
+        PauseInput.Enable();
+    }
+    private void OnDisable()
+    {
+        PauseInput.Disable();
+    }
 
     private void Awake()
     {
@@ -40,11 +54,17 @@ public class GameManager : MonoBehaviour
         if (GameTime <= 0)
         {
             isPlaying = false;
+            SceneManager.LoadScene(3);
             GameTime = 0;
         }
         else
         {
             GameTime -= Time.deltaTime;
+        }
+
+        if (PauseInput.WasPerformedThisFrame())
+        {
+            OpenPauseMenu();
         }
     }
 
@@ -55,13 +75,45 @@ public class GameManager : MonoBehaviour
         GameTimeText.text = "Time: " + min.ToString("00") + ":" + seg.ToString("00");
     }
 
-    public void ReloadLevel()
+    public void OpenGameOver()
+    {
+        SceneManager.LoadScene(3);
+    }
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(1);
+    }
+
+    public void GoToTitleScreen()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void GoToWinScreen()
+    {
+        SceneManager.LoadScene(2);
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+    // Update is called once per frame
+    public void OpenPauseMenu()
+    {
+        pausePanel.SetActive(true);
+        Time.timeScale = 0;
+    }
+
+    public void ClosePauseMenu()
+    {
+        pausePanel.SetActive(false);
+        Time.timeScale = 1;
     }
 
     public void AddTime(float time)
     {
         GameTime += time;
     }
+
 }

@@ -84,7 +84,7 @@ public class EnemyScript : MonoBehaviour
         if(health <= 0)
         {
             int RandomDrop = Random.Range(1, 101);
-            if (RandomDrop>50)
+            if (RandomDrop>30)
             {
                 Instantiate(RDrop, this.transform.position, Quaternion.identity);
             }

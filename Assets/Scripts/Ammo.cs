@@ -17,13 +17,13 @@ public class Ammo : MonoBehaviour
 
     void Start()
     {
-        int value = UnityEngine.Random.Range(0, 10);
-        if(value > 7.5)
+        int value = UnityEngine.Random.Range(1, 4);
+        if(value > 2)
         {
             currentSelection = pickupSelection.time;
             GetComponent<MeshRenderer>().material.color = Color.yellow;
         }
-        else if(value > 5)
+        else if(value > 1)
         {
             currentSelection = pickupSelection.Life;
             GetComponent<MeshRenderer>().material.color = Color.green;

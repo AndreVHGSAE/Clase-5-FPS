@@ -56,7 +56,7 @@ public class PlayerShoot : MonoBehaviour
             }
         }
         
-        if (Mouse.current.leftButton.wasPressedThisFrame && bullets > 0)
+        if (Mouse.current.leftButton.wasPressedThisFrame && bullets > 0 && Time.timeScale==1)
         {
             RaycastHit hit;
             bullets--;

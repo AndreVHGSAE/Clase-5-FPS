@@ -27,6 +27,9 @@ public class EnemyScript : MonoBehaviour
 
     int currentPoint = 0;
 
+    public float currentTimeS=0;
+    public float MaxTimeS=0;
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -37,6 +40,7 @@ public class EnemyScript : MonoBehaviour
     {
         player = GameObject.Find("Jugador").transform;
         agent.stoppingDistance = 2;
+        MaxTimeS = Random.Range(1f, 10f);
     }
 
     // Update is called once per frame
@@ -44,7 +48,7 @@ public class EnemyScript : MonoBehaviour
     {
         if(Vector3.Distance(transform.position, player.position) <= 10)
         {
-            ZombieAudio.Play();
+            
             agent.destination = player.position;
         }
         else
@@ -73,6 +77,14 @@ public class EnemyScript : MonoBehaviour
         else
         {
             knife.SetActive(false);
+        }
+
+        currentTimeS += Time.deltaTime;
+        if (currentTimeS >= MaxTimeS)
+        {
+            ZombieAudio.Play();
+            MaxTimeS = Random.Range(1f, 10f);
+            currentTimeS = 0;
         }
     }
 

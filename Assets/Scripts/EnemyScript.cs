@@ -30,6 +30,8 @@ public class EnemyScript : MonoBehaviour
     public float currentTimeS=0;
     public float MaxTimeS=0;
 
+    GameManager UpdateInterface;
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -38,6 +40,8 @@ public class EnemyScript : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        UpdateInterface = GameObject.Find("GAMEMANAGER").GetComponent<GameManager>();
+
         player = GameObject.Find("Jugador").transform;
         agent.stoppingDistance = 2;
         MaxTimeS = Random.Range(1f, 10f);
@@ -100,6 +104,7 @@ public class EnemyScript : MonoBehaviour
             {
                 Instantiate(RDrop, this.transform.position, Quaternion.identity);
             }
+            UpdateInterface.AddScore(2);
             Destroy(this.gameObject);
         }
     }
